@@ -1,0 +1,103 @@
+// Prisma schema for Music Stream — SQLite.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("USER")
+  approved     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  artist    Artist?
+  playlists Playlist[]
+  favorites Favorite[]
+}
+
+model Artist {
+  id        String  @id @default(cuid())
+  name      String
+  details   String?
+  imagePath String?
+  ownerId   String? @unique
+  owner     User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
+  albums Album[]
+  songs  Song[]
+}
+
+model Genre {
+  id   String @id @default(cuid())
+  name String @unique
+
+  songs Song[]
+}
+
+model Album {
+  id        String  @id @default(cuid())
+  title     String
+  coverPath String?
+  artistId  String
+  ownerId   String?
+
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  songs  Song[]
+}
+
+model Song {
+  id        String   @id @default(cuid())
+  title     String
+  audioPath String
+  coverPath String?
+  artistId  String
+  albumId   String?
+  genreId   String?
+  ownerId   String?
+  createdAt DateTime @default(now())
+
+  artist Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  album  Album?  @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  genre  Genre?  @relation(fields: [genreId], references: [id], onDelete: SetNull)
+
+  playlistSongs PlaylistSong[]
+  favorites     Favorite[]
+}
+
+model Playlist {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  owner User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  songs PlaylistSong[]
+}
+
+model PlaylistSong {
+  playlistId String
+  songId     String
+
+  playlist Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  song     Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@id([playlistId, songId])
+}
+
+model Favorite {
+  userId String
+  songId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  song Song @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@id([userId, songId])
+}
