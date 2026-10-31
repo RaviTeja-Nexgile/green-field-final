@@ -1,0 +1,44 @@
+:root {
+  --background: #121212;
+  --surface: #181818;
+  --surface-raised: #282828;
+  --text: #ffffff;
+  --text-muted: #b3b3b3;
+  --primary: #1db954;
+  --error: #e91429;
+  --success: #1db954;
+  --radius: 8px;
+  --radius-pill: 999px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}

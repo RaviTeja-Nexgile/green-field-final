@@ -4,3 +4,40 @@
 .nexgile/greenfield/checkpoints/
 .nexgile/greenfield/mockups/
 docs/input/
+
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Environment files (only .env.example is committed)
+.env
+.env.local
+.env.*.local
+
+# SQLite database files
+prisma/*.db
+prisma/*.db-journal
+*.db
+*.db-journal
+
+# Uploaded audio and cover files
+storage/
+
+# Test output
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
