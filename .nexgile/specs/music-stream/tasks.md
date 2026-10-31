@@ -1,6 +1,6 @@
 # Tasks: Music Stream
 
-- [ ] 1. Project setup
+- [x] 1. Project setup
   - _Requirements: 1.1_
   - _Files: package.json, tsconfig.json, next.config.mjs, prisma/schema.prisma, prisma/seed.ts, .env.example, .gitignore, README.md, src/app/layout.tsx, src/app/globals.css, src/app/api/health/route.ts, src/lib/db.ts, src/lib/auth.ts, e2e/.gitkeep, vitest.config.ts_
   - _Verify: npm install && npm test_
