@@ -7,7 +7,7 @@
   - _Verify: npx prisma validate_
   - _Issue: #1_
 
-- [ ] 2. Registration and login
+- [x] 2. Registration and login
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8_
   - _Depends: 1_
   - _Files: src/app/(auth)/login/page.tsx, src/app/(auth)/register/page.tsx, src/app/api/auth/register/route.ts, src/app/api/auth/login/route.ts, src/app/api/auth/logout/route.ts, src/app/api/auth/me/route.ts, src/app/(auth)/auth.module.css, src/app/(auth)/__tests__/auth.test.ts_
