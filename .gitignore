@@ -3,3 +3,16 @@
 .nexgile/greenfield/thread.jsonl
 .nexgile/greenfield/checkpoints/
 docs/input/
+
+# .NET build output
+bin/
+obj/
+*.user
+
+# SQLite database files (created at runtime)
+*.db
+*.db-shm
+*.db-wal
+
+# Test results
+TestResults/
