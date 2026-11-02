@@ -1,6 +1,6 @@
 # Tasks: Care Clinic Manager
 
-- [ ] 1. Project setup
+- [x] 1. Project setup
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.10, 14.7_
   - _Area: setup_
   - _Files: CareClinicManager.sln, src/CareClinicManager/Program.cs, src/CareClinicManager/appsettings.json, src/CareClinicManager/appsettings.Development.json, src/CareClinicManager/Data/AppDbContext.cs, src/CareClinicManager/Data/DbSeeder.cs, src/CareClinicManager/Data/Migrations/**, src/CareClinicManager/Models/**, src/CareClinicManager/Views/Shared/**, src/CareClinicManager/wwwroot/css/site.css, src/CareClinicManager/wwwroot/js/site.js, src/CareClinicManager/wwwroot/lib/**, src/CareClinicManager/e2e/.gitkeep, tests/CareClinicManager.Tests/**, README.md, .gitignore_
