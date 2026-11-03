@@ -4,7 +4,7 @@ public class Prescription
 {
     public int Id { get; set; }
     public int MedicalRecordId { get; set; }
-    public int ConsultationId { get; set; }
+    public int? ConsultationId { get; set; }
     public int MedicineId { get; set; }
     public string Dosage { get; set; } = string.Empty;
     public int Quantity { get; set; }

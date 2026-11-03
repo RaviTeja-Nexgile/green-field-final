@@ -110,7 +110,7 @@ public class AppDbContext : DbContext
             e.HasOne(p => p.Consultation)
                 .WithMany(c => c.Prescriptions)
                 .HasForeignKey(p => p.ConsultationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
             e.HasOne(p => p.Medicine)
                 .WithMany(m => m.Prescriptions)
                 .HasForeignKey(p => p.MedicineId)
