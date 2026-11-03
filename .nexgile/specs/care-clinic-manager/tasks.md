@@ -8,7 +8,7 @@
   - _Verify: dotnet test_
   - _Issue: #13_
 
-- [ ] 2. Sign in, registration and role-based access
+- [x] 2. Sign in, registration and role-based access
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10, 14.7_
   - _Depends: 1_
   - _Area: api_
@@ -16,7 +16,7 @@
   - _Verify: dotnet test --filter AccountTests_
   - _Issue: #14_
 
-- [ ] 3. Admin dashboard and analytics
+- [x] 3. Admin dashboard and analytics
   - _Requirements: 14.1, 14.2, 14.6, 14.7_
   - _Depends: 1_
   - _Area: ui_
@@ -24,7 +24,7 @@
   - _Verify: dotnet test --filter AdminDashboardTests_
   - _Issue: #15_
 
-- [ ] 4. Doctor dashboard
+- [x] 4. Doctor dashboard
   - _Requirements: 14.1, 14.3, 14.6, 14.7_
   - _Depends: 1_
   - _Area: ui_
