@@ -1,0 +1,32 @@
+@* Renders pagination controls for a list screen.
+   Model is a tuple: (int Page, int TotalPages, string? Search, string? Sort, string? Filter, string Action) *@
+@{
+    var page = (int)Model.Item1;
+    var totalPages = (int)Model.Item2;
+    var search = (string?)Model.Item3;
+    var sort = (string?)Model.Item4;
+    var filter = (string?)Model.Item5;
+    var action = (string)Model.Item6;
+}
+
+@if (totalPages > 1)
+{
+    <nav aria-label="Pagination">
+        <ul class="pagination pagination-sm mb-0">
+            <li class="page-item @(page <= 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="@action" asp-route-page="@(page - 1)" asp-route-search="@search" asp-route-sort="@sort" asp-route-filter="@filter">Previous</a>
+            </li>
+
+            @for (var i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == page ? "active" : "")">
+                    <a class="page-link" asp-action="@action" asp-route-page="@i" asp-route-search="@search" asp-route-sort="@sort" asp-route-filter="@filter">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(page >= totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="@action" asp-route-page="@(page + 1)" asp-route-search="@search" asp-route-sort="@sort" asp-route-filter="@filter">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
