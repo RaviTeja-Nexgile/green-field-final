@@ -1,0 +1,384 @@
+@model CareClinicManager.ViewModels.Doctor.DashboardViewModel
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/doctor-dashboard.css" asp-append-version="true" />
+
+<div class="doctor-dashboard">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <h1 class="dashboard-title">Doctor Dashboard</h1>
+        <span class="text-muted">@DateTime.Today.ToString("dd MMM yyyy")</span>
+    </div>
+
+    @* KPI cards *@
+    <div class="row g-3 kpi-row">
+        <div class="col-6 col-md-4 col-xl">
+            <div class="card kpi-card">
+                <div class="kpi-label">Today's Appointments</div>
+                <div class="kpi-value">@Model.TodayAppointmentsCount</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <div class="card kpi-card">
+                <div class="kpi-label">Patients</div>
+                <div class="kpi-value">@Model.PatientsCount</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <div class="card kpi-card">
+                <div class="kpi-label">Consultations</div>
+                <div class="kpi-value">@Model.ConsultationsCount</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <div class="card kpi-card">
+                <div class="kpi-label">Prescriptions</div>
+                <div class="kpi-value">@Model.PrescriptionsCount</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl">
+            <div class="card kpi-card">
+                <div class="kpi-label">Lab Requests</div>
+                <div class="kpi-value">@Model.LabRequestsCount</div>
+            </div>
+        </div>
+    </div>
+
+    @* Today's appointments *@
+    <div class="card table-card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h2 class="table-title">Today's Appointments</h2>
+            <div class="table-toolbar">
+                <input type="search" class="form-control table-search" placeholder="Search…" data-table="appointments" />
+                <select class="form-select table-filter" data-table="appointments" data-column="status" aria-label="Filter by status">
+                    <option value="">All statuses</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle data-table" id="appointments">
+                <thead>
+                    <tr>
+                        <th data-sort="patient">Patient</th>
+                        <th data-sort="department">Department</th>
+                        <th data-sort="time">Time</th>
+                        <th data-sort="status">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model.TodayAppointments)
+                    {
+                        <tr>
+                            <td>@a.PatientName</td>
+                            <td>@a.DepartmentName</td>
+                            <td>@a.Time.ToString(@"hh\:mm")</td>
+                            <td><span class="badge badge-status-@a.Status.Replace(" ", "-")">@a.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* Patient records *@
+    <div class="card table-card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h2 class="table-title">Patient Records</h2>
+            <div class="table-toolbar">
+                <input type="search" class="form-control table-search" placeholder="Search…" data-table="patients" />
+                <select class="form-select table-filter" data-table="patients" data-column="gender" aria-label="Filter by gender">
+                    <option value="">All genders</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle data-table" id="patients">
+                <thead>
+                    <tr>
+                        <th data-sort="name">Name</th>
+                        <th data-sort="gender">Gender</th>
+                        <th data-sort="phone">Phone</th>
+                        <th data-sort="email">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Patients)
+                    {
+                        <tr>
+                            <td>@p.Name</td>
+                            <td>@p.Gender</td>
+                            <td>@p.Phone</td>
+                            <td>@p.Email</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* Consultation history *@
+    <div class="card table-card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h2 class="table-title">Consultation History</h2>
+            <div class="table-toolbar">
+                <input type="search" class="form-control table-search" placeholder="Search…" data-table="consultations" />
+                <select class="form-select table-filter" data-table="consultations" data-column="diagnosis" aria-label="Filter by diagnosis">
+                    <option value="">All diagnoses</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle data-table" id="consultations">
+                <thead>
+                    <tr>
+                        <th data-sort="patient">Patient</th>
+                        <th data-sort="diagnosis">Diagnosis</th>
+                        <th data-sort="date">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Consultations)
+                    {
+                        <tr>
+                            <td>@c.PatientName</td>
+                            <td>@c.Diagnosis</td>
+                            <td>@c.Date.ToString("dd MMM yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* Prescriptions *@
+    <div class="card table-card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h2 class="table-title">Prescriptions</h2>
+            <div class="table-toolbar">
+                <input type="search" class="form-control table-search" placeholder="Search…" data-table="prescriptions" />
+                <select class="form-select table-filter" data-table="prescriptions" data-column="issued" aria-label="Filter by issued">
+                    <option value="">All</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle data-table" id="prescriptions">
+                <thead>
+                    <tr>
+                        <th data-sort="patient">Patient</th>
+                        <th data-sort="medicine">Medicine</th>
+                        <th data-sort="dosage">Dosage</th>
+                        <th data-sort="quantity">Quantity</th>
+                        <th data-sort="issued">Issued</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.Prescriptions)
+                    {
+                        <tr>
+                            <td>@r.PatientName</td>
+                            <td>@r.MedicineName</td>
+                            <td>@r.Dosage</td>
+                            <td>@r.Quantity</td>
+                            <td>@(r.Issued ? "Yes" : "No")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* Laboratory requests *@
+    <div class="card table-card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h2 class="table-title">Laboratory Requests</h2>
+            <div class="table-toolbar">
+                <input type="search" class="form-control table-search" placeholder="Search…" data-table="labrequests" />
+                <select class="form-select table-filter" data-table="labrequests" data-column="status" aria-label="Filter by status">
+                    <option value="">All statuses</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle data-table" id="labrequests">
+                <thead>
+                    <tr>
+                        <th data-sort="patient">Patient</th>
+                        <th data-sort="testtype">Test Type</th>
+                        <th data-sort="status">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var l in Model.LabRequests)
+                    {
+                        <tr>
+                            <td>@l.PatientName</td>
+                            <td>@l.TestType</td>
+                            <td><span class="badge badge-status-@l.Status.Replace(" ", "-")">@l.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var PAGE_SIZE = 10;
+
+            // Each data table is driven by one state object: the full row list,
+            // the current search query, the filter value, and the sort order.
+            // Search, filter and sort all feed a single "visible rows" list, and
+            // pagination pages over that list, so the controls compose instead of
+            // fighting over row.style.display.
+            document.querySelectorAll('.data-table').forEach(function (table) {
+                var tbody = table.querySelector('tbody');
+                var allRows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+
+                var state = {
+                    query: '',
+                    filterColumn: null,
+                    filterValue: '',
+                    sortColumn: null,
+                    sortAsc: true,
+                    page: 1
+                };
+
+                // Build the pagination controls (only when there is more than one page).
+                var nav = document.createElement('div');
+                nav.className = 'pagination-controls';
+                var prev = document.createElement('button');
+                prev.type = 'button';
+                prev.className = 'btn btn-sm btn-outline-primary';
+                prev.textContent = 'Prev';
+                var next = document.createElement('button');
+                next.type = 'button';
+                next.className = 'btn btn-sm btn-outline-primary';
+                next.textContent = 'Next';
+                var label = document.createElement('span');
+                label.className = 'pagination-label';
+                nav.appendChild(prev);
+                nav.appendChild(label);
+                nav.appendChild(next);
+                table.closest('.table-card').appendChild(nav);
+
+                // Wire the search input for this table.
+                var search = document.querySelector('.table-search[data-table="' + table.id + '"]');
+                if (search) {
+                    search.addEventListener('input', function () {
+                        state.query = search.value.trim().toLowerCase();
+                        state.page = 1;
+                        render();
+                    });
+                }
+
+                // Wire the filter dropdown for this table and populate its options
+                // from the distinct values of the target column.
+                var filter = document.querySelector('.table-filter[data-table="' + table.id + '"]');
+                if (filter) {
+                    state.filterColumn = parseInt(filter.dataset.columnIndex, 10);
+                    if (isNaN(state.filterColumn)) {
+                        // Resolve the column index from the header's data-sort name.
+                        var colName = filter.dataset.column;
+                        var th = table.querySelector('th[data-sort="' + colName + '"]');
+                        state.filterColumn = th ? Array.prototype.indexOf.call(th.parentNode.children, th) : null;
+                    }
+                    var seen = {};
+                    allRows.forEach(function (row) {
+                        if (state.filterColumn === null) return;
+                        var cell = row.children[state.filterColumn];
+                        var val = cell ? cell.textContent.trim() : '';
+                        if (val && !seen[val]) {
+                            seen[val] = true;
+                            var opt = document.createElement('option');
+                            opt.value = val;
+                            opt.textContent = val;
+                            filter.appendChild(opt);
+                        }
+                    });
+                    filter.addEventListener('change', function () {
+                        state.filterValue = filter.value;
+                        state.page = 1;
+                        render();
+                    });
+                }
+
+                // Wire sortable headers.
+                table.querySelectorAll('th[data-sort]').forEach(function (th) {
+                    th.style.cursor = 'pointer';
+                    th.addEventListener('click', function () {
+                        var index = Array.prototype.indexOf.call(th.parentNode.children, th);
+                        if (state.sortColumn === index) {
+                            state.sortAsc = !state.sortAsc;
+                        } else {
+                            state.sortColumn = index;
+                            state.sortAsc = true;
+                        }
+                        state.page = 1;
+                        render();
+                    });
+                });
+
+                prev.addEventListener('click', function () {
+                    if (state.page > 1) { state.page--; render(); }
+                });
+                next.addEventListener('click', function () {
+                    if (state.page < totalPages()) { state.page++; render(); }
+                });
+
+                function totalPages() {
+                    return Math.max(1, Math.ceil(visibleRows().length / PAGE_SIZE));
+                }
+
+                // The single source of truth: rows that pass search + filter, in sort order.
+                function visibleRows() {
+                    var rows = allRows.filter(function (row) {
+                        if (state.query && row.textContent.toLowerCase().indexOf(state.query) === -1) {
+                            return false;
+                        }
+                        if (state.filterValue && state.filterColumn !== null) {
+                            var cell = row.children[state.filterColumn];
+                            var val = cell ? cell.textContent.trim() : '';
+                            if (val !== state.filterValue) return false;
+                        }
+                        return true;
+                    });
+                    if (state.sortColumn !== null) {
+                        var idx = state.sortColumn;
+                        var asc = state.sortAsc;
+                        rows.sort(function (a, b) {
+                            var av = a.children[idx].textContent.trim();
+                            var bv = b.children[idx].textContent.trim();
+                            var cmp = av.localeCompare(bv, undefined, { numeric: true });
+                            return asc ? cmp : -cmp;
+                        });
+                    }
+                    return rows;
+                }
+
+                function render() {
+                    var rows = visibleRows();
+                    var total = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+                    if (state.page > total) state.page = total;
+
+                    // Hide every row, then show only the current page's rows.
+                    allRows.forEach(function (row) { row.style.display = 'none'; });
+                    var start = (state.page - 1) * PAGE_SIZE;
+                    var end = Math.min(start + PAGE_SIZE, rows.length);
+                    for (var i = start; i < end; i++) {
+                        rows[i].style.display = '';
+                    }
+
+                    label.textContent = 'Page ' + state.page + ' of ' + total;
+                    prev.disabled = state.page === 1;
+                    next.disabled = state.page === total;
+                }
+
+                render();
+            });
+        })();
+    </script>
+}
