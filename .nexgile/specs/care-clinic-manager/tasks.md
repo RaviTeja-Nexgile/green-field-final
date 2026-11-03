@@ -112,7 +112,7 @@
   - _Verify: dotnet test --filter MedicineTests_
   - _Issue: #26_
 
-- [ ] 15. Billing, invoices and payments
+- [x] 15. Billing, invoices and payments
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 12.3_
   - _Depends: 1_
   - _Area: ui_
