@@ -1,0 +1,35 @@
+/* Department and specialization management screens */
+
+.department-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.department-toolbar .form-label {
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.table-responsive {
+    border-radius: var(--radius-input);
+}
+
+.table thead th {
+    color: var(--text);
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+@media (max-width: 768px) {
+    .department-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

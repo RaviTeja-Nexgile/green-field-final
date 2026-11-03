@@ -11,6 +11,8 @@ builder.Services.AddScoped<CareClinicManager.Services.InvoiceService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<CareClinicManager.Services.DepartmentService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {

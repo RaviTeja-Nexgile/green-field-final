@@ -1,0 +1,83 @@
+@model CareClinicManager.ViewModels.Admin.SpecializationListViewModel
+@{
+    ViewData["Title"] = "Specializations";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/departments.css" asp-append-version="true" />
+}
+
+@if (TempData["Error"] is string error)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Specializations</h1>
+    <a asp-action="CreateSpecialization" class="btn btn-primary">Add specialization</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="get" class="row g-2 mb-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label" for="search">Search</label>
+                <input type="text" id="search" name="search" class="form-control" value="@Model.Search" placeholder="Search by name" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="filter">Filter (starts with)</label>
+                <input type="text" id="filter" name="filter" class="form-control" value="@Model.Filter" placeholder="e.g. C" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="sort">Sort</label>
+                <select id="sort" name="sort" class="form-select">
+                    <option value="">Name (A-Z)</option>
+                    <option value="name_desc" selected="@(Model.Sort == "name_desc")">Name (Z-A)</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">Apply</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Items.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="2" class="text-muted text-center py-4">No specializations found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td class="text-end">
+                                    <a asp-action="EditSpecialization" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <form asp-action="DeleteSpecialization" asp-route-id="@item.Id" method="post" class="d-inline"
+                                          onsubmit="return confirm('Delete this specialization?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @await Html.PartialAsync("_Pagination", (Model.Page, Model.TotalPages, Model.Search, Model.Sort, Model.Filter, "Specializations"))
+    </div>
+</div>
