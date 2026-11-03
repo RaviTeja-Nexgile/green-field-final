@@ -1,0 +1,44 @@
+@model List<CareClinicManager.Models.Invoice>
+@{
+    ViewData["Title"] = "My invoices";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/invoices.css" asp-append-version="true" />
+}
+
+<h1 class="h3 mb-3">My invoices</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="4" class="text-center text-muted py-4">You have no invoices.</td></tr>
+                    }
+                    @foreach (var invoice in Model)
+                    {
+                        <tr>
+                            <td>@invoice.Id</td>
+                            <td class="text-truncate" style="max-width: 320px;">@invoice.Items</td>
+                            <td>@invoice.TotalAmount.ToString("C")</td>
+                            <td>
+                                <span class="badge @(invoice.Status == "Paid" ? "badge-status-Paid" : "badge-status-Unpaid")">@invoice.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

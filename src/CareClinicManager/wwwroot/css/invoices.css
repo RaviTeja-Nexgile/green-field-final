@@ -1,0 +1,21 @@
+.badge-status-Unpaid {
+    background-color: var(--error);
+    color: #ffffff;
+}
+
+.badge-status-Paid {
+    background-color: var(--success);
+    color: #ffffff;
+}
+
+.badge {
+    padding: 0.4em 0.7em;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
