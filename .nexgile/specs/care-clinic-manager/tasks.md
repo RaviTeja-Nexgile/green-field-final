@@ -72,7 +72,7 @@
   - _Verify: dotnet test --filter DepartmentManagementTests_
   - _Issue: #21_
 
-- [ ] 10. Appointment booking, calendar and status tracking
+- [x] 10. Appointment booking, calendar and status tracking
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 6.5_
   - _Depends: 1_
   - _Area: ui_
