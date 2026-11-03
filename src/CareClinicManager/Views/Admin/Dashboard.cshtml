@@ -1,0 +1,199 @@
+@model CareClinicManager.ViewModels.Admin.DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Admin Dashboard</h1>
+</div>
+
+@* KPI cards (criteria 14.1, 14.2) *@
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Staff</div>
+                <div class="kpi-value">@Model.StaffCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Doctors</div>
+                <div class="kpi-value">@Model.DoctorCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Departments</div>
+                <div class="kpi-value">@Model.DepartmentCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Patients</div>
+                <div class="kpi-value">@Model.PatientCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Appointments</div>
+                <div class="kpi-value">@Model.AppointmentCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Today</div>
+                <div class="kpi-value">@Model.TodayAppointmentCount</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Financial reports (criteria 14.2) *@
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Total Revenue</div>
+                <div class="kpi-value">@Model.TotalRevenue.ToString("C")</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Unpaid</div>
+                <div class="kpi-value">@Model.UnpaidAmount.ToString("C")</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Invoices</div>
+                <div class="kpi-value">@Model.InvoiceCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card kpi-card">
+            <div class="card-body">
+                <div class="kpi-label">Paid Invoices</div>
+                <div class="kpi-value">@Model.PaidInvoiceCount</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Recent appointments data table with search, sorting, filtering and pagination (criteria 14.6) *@
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Recent Appointments</span>
+    </div>
+    <div class="card-body">
+        <form method="get" asp-action="Dashboard" class="row g-2 mb-3">
+            <div class="col-12 col-md-4">
+                <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search patient, doctor or department..." />
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="status" class="form-select">
+                    <option value="All" selected="@(Model.Status == null || Model.Status == "All")">All statuses</option>
+                    <option value="Scheduled" selected="@(Model.Status == "Scheduled")">Scheduled</option>
+                    <option value="Checked in" selected="@(Model.Status == "Checked in")">Checked in</option>
+                    <option value="In progress" selected="@(Model.Status == "In progress")">In progress</option>
+                    <option value="Completed" selected="@(Model.Status == "Completed")">Completed</option>
+                    <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelled</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="sort" class="form-select">
+                    <option value="" selected="@(string.IsNullOrEmpty(Model.Sort))">Newest first</option>
+                    <option value="date" selected="@(Model.Sort == "date")">Date oldest first</option>
+                    <option value="date_desc" selected="@(Model.Sort == "date_desc")">Date newest first</option>
+                    <option value="patient" selected="@(Model.Sort == "patient")">Patient A-Z</option>
+                    <option value="patient_desc" selected="@(Model.Sort == "patient_desc")">Patient Z-A</option>
+                    <option value="doctor" selected="@(Model.Sort == "doctor")">Doctor A-Z</option>
+                    <option value="status" selected="@(Model.Sort == "status")">Status A-Z</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-outline-primary">Apply</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Appointments.Any())
+                    {
+                        <tr><td colspan="7" class="text-center text-muted py-4">No appointments found.</td></tr>
+                    }
+                    @foreach (var appointment in Model.Appointments)
+                    {
+                        <tr>
+                            <td>@appointment.Id</td>
+                            <td>@appointment.Patient?.Name</td>
+                            <td>@appointment.Doctor?.Name</td>
+                            <td>@appointment.Department?.Name</td>
+                            <td>@appointment.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@appointment.Time.ToString(@"hh\:mm")</td>
+                            <td>
+                                <span class="badge @BadgeClass(appointment.Status)">@appointment.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav aria-label="Appointment pages">
+                <ul class="pagination mb-0">
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <li class="page-item @(p == Model.Page ? "active" : "")">
+                            <a class="page-link" asp-action="Dashboard" asp-route-search="@Model.Search" asp-route-status="@Model.Status" asp-route-sort="@Model.Sort" asp-route-page="@p">@p</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
+
+@functions {
+    private static string BadgeClass(string status) => status switch
+    {
+        "Checked in" => "badge-status-Checked-in",
+        "In progress" => "badge-status-In-progress",
+        "Completed" => "badge-status-Completed",
+        "Cancelled" => "badge-status-Cancelled",
+        _ => "badge-status-Scheduled",
+    };
+}
