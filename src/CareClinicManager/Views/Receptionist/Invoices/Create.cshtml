@@ -1,0 +1,110 @@
+@model CareClinicManager.ViewModels.Receptionist.InvoiceFormViewModel
+@{
+    ViewData["Title"] = "New invoice";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/invoices.css" asp-append-version="true" />
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">New invoice</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to invoices</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="PatientId" class="form-label">Patient</label>
+                <select asp-for="PatientId" class="form-select" asp-items="@(new SelectList(Model.Patients, "Id", "Name"))">
+                    <option value="">-- Select a patient --</option>
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </div>
+
+            <h2 class="h6">Items to bill</h2>
+            <table class="table align-middle" id="items-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th style="width: 110px;">Quantity</th>
+                        <th style="width: 140px;">Unit price</th>
+                        <th style="width: 60px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Items.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input asp-for="Items[i].Description" class="form-control" placeholder="e.g. Consultation" />
+                                <span asp-validation-for="Items[i].Description" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="Items[i].Quantity" class="form-control" type="number" min="1" />
+                                <span asp-validation-for="Items[i].Quantity" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="Items[i].UnitPrice" class="form-control" type="number" step="0.01" min="0.01" />
+                                <span asp-validation-for="Items[i].UnitPrice" class="text-danger"></span>
+                            </td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-row">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button type="button" id="add-row" class="btn btn-outline-primary btn-sm mb-3">Add item</button>
+
+            <div class="d-grid d-md-block">
+                <button type="submit" class="btn btn-primary">Save invoice</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var tbody = document.querySelector('#items-table tbody');
+            var addBtn = document.getElementById('add-row');
+
+            function reindex() {
+                var rows = tbody.querySelectorAll('tr');
+                rows.forEach(function (row, i) {
+                    row.querySelectorAll('input').forEach(function (input) {
+                        var name = input.getAttribute('name');
+                        if (name) {
+                            input.setAttribute('name', name.replace(/Items\[\d+\]/, 'Items[' + i + ']'));
+                        }
+                    });
+                });
+            }
+
+            addBtn.addEventListener('click', function () {
+                var row = tbody.querySelector('tr').cloneNode(true);
+                row.querySelectorAll('input').forEach(function (input) {
+                    input.value = '';
+                    input.classList.remove('input-validation-error');
+                });
+                row.querySelectorAll('.text-danger').forEach(function (el) { el.textContent = ''; });
+                tbody.appendChild(row);
+                reindex();
+            });
+
+            tbody.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-row')) {
+                    var rows = tbody.querySelectorAll('tr');
+                    if (rows.length > 1) {
+                        e.target.closest('tr').remove();
+                        reindex();
+                    }
+                }
+            });
+        })();
+    </script>
+}

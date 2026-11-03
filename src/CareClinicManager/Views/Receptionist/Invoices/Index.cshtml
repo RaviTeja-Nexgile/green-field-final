@@ -1,0 +1,101 @@
+@model CareClinicManager.ViewModels.Receptionist.InvoiceListViewModel
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/invoices.css" asp-append-version="true" />
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Invoices</h1>
+    <a asp-action="Create" class="btn btn-primary">New invoice</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-12 col-md-4">
+                <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Search patient or items..." />
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="status" class="form-select">
+                    <option value="All" selected="@(Model.Status == null || Model.Status == "All")">All statuses</option>
+                    <option value="Unpaid" selected="@(Model.Status == "Unpaid")">Unpaid</option>
+                    <option value="Paid" selected="@(Model.Status == "Paid")">Paid</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="sort" class="form-select">
+                    <option value="" selected="@(string.IsNullOrEmpty(Model.Sort))">Newest first</option>
+                    <option value="patient" selected="@(Model.Sort == "patient")">Patient A-Z</option>
+                    <option value="patient_desc" selected="@(Model.Sort == "patient_desc")">Patient Z-A</option>
+                    <option value="total" selected="@(Model.Sort == "total")">Total low-high</option>
+                    <option value="total_desc" selected="@(Model.Sort == "total_desc")">Total high-low</option>
+                    <option value="status" selected="@(Model.Sort == "status")">Status A-Z</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-outline-primary">Apply</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Patient</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Items.Any())
+                    {
+                        <tr><td colspan="6" class="text-center text-muted py-4">No invoices found.</td></tr>
+                    }
+                    @foreach (var invoice in Model.Items)
+                    {
+                        <tr>
+                            <td>@invoice.Id</td>
+                            <td>@invoice.Patient?.Name</td>
+                            <td class="text-truncate" style="max-width: 260px;">@invoice.Items</td>
+                            <td>@invoice.TotalAmount.ToString("C")</td>
+                            <td>
+                                <span class="badge @BadgeClass(invoice.Status)">@invoice.Status</span>
+                            </td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@invoice.Id" class="btn btn-sm btn-outline-primary">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav aria-label="Invoice pages">
+                <ul class="pagination mb-0">
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <li class="page-item @(p == Model.Page ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-search="@Model.Search" asp-route-status="@Model.Status" asp-route-sort="@Model.Sort" asp-route-page="@p">@p</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
+
+@functions {
+    private static string BadgeClass(string status) => status switch
+    {
+        "Paid" => "badge-status-Paid",
+        _ => "badge-status-Unpaid",
+    };
+}
