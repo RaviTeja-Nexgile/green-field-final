@@ -88,7 +88,7 @@
   - _Verify: dotnet test --filter ConsultationTests_
   - _Issue: #23_
 
-- [ ] 12. Prescription management and pharmacy inventory
+- [x] 12. Prescription management and pharmacy inventory
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 10.5_
   - _Depends: 1_
   - _Area: ui_
