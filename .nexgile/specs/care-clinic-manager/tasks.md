@@ -64,7 +64,7 @@
   - _Verify: dotnet test --filter StaffManagementTests_
   - _Issue: #20_
 
-- [ ] 9. Department and specialization management
+- [x] 9. Department and specialization management
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
   - _Depends: 1_
   - _Area: ui_
