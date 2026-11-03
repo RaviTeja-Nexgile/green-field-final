@@ -38,7 +38,7 @@ public class InvoiceFormViewModel
     [MinLength(1, ErrorMessage = "Add at least one item to bill.")]
     public List<InvoiceItemViewModel> Items { get; set; } = new();
 
-    public List<Patient> Patients { get; set; } = new();
+    public List<Models.Patient> Patients { get; set; } = new();
 }
 
 /// <summary>View model for recording a payment on an invoice.</summary>
