@@ -375,7 +375,7 @@ namespace CareClinicManager.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ConsultationId")
+                    b.Property<int?>("ConsultationId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Dosage")
@@ -673,8 +673,7 @@ namespace CareClinicManager.Data.Migrations
                     b.HasOne("CareClinicManager.Models.Consultation", "Consultation")
                         .WithMany("Prescriptions")
                         .HasForeignKey("ConsultationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("CareClinicManager.Models.MedicalRecord", "MedicalRecord")
                         .WithMany("Prescriptions")

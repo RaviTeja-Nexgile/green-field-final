@@ -1,0 +1,76 @@
+@model CareClinicManager.ViewModels.Doctor.PrescriptionListViewModel
+
+@{
+    ViewData["Title"] = "Prescriptions";
+}
+
+<div class="prescriptions-page">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-1">Prescriptions</h1>
+            <p class="text-muted mb-0">Patient: @Model.PatientName</p>
+        </div>
+        <a asp-action="Create" asp-route-medicalRecordId="@Model.MedicalRecordId" class="btn btn-primary">
+            New prescription
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            @if (Model.Prescriptions.Count == 0)
+            {
+                <p class="text-muted mb-0">No prescriptions yet.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Dosage</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model.Prescriptions)
+                            {
+                                <tr>
+                                    <td>@p.MedicineName</td>
+                                    <td>@p.Dosage</td>
+                                    <td>@p.Quantity</td>
+                                    <td>
+                                        @if (p.Issued)
+                                        {
+                                            <span class="badge badge-status-Completed">Issued</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-status-Scheduled">Draft</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        @if (!p.Issued)
+                                        {
+                                            <form asp-action="Cancel" method="post" class="d-inline">
+                                                <input type="hidden" name="id" value="@p.Id" />
+                                                <input type="hidden" name="medicalRecordId" value="@Model.MedicalRecordId" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                            </form>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/prescriptions.css" asp-append-version="true" />
+}
