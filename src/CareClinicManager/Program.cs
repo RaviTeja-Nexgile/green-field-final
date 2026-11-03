@@ -7,11 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<CareClinicManager.Services.InvoiceService>();
+builder.Services.AddScoped<CareClinicManager.Services.DepartmentService>();
+builder.Services.AddScoped<CareClinicManager.Repositories.AppointmentRepository>();
+builder.Services.AddScoped<CareClinicManager.Services.AppointmentService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<CareClinicManager.Services.DepartmentService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

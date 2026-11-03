@@ -1,0 +1,59 @@
+@model CareClinicManager.ViewModels.Receptionist.AppointmentCalendarViewModel
+@{
+    ViewData["Title"] = "Appointment Calendar";
+    var firstDay = new DateTime(Model.Year, Model.Month, 1);
+    var daysInMonth = DateTime.DaysInMonth(Model.Year, Model.Month);
+    var prev = firstDay.AddMonths(-1);
+    var next = firstDay.AddMonths(1);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Appointment Calendar</h1>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-primary me-2">List</a>
+        <a asp-action="Book" class="btn btn-primary">Book appointment</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a asp-action="Calendar" asp-route-year="@prev.Year" asp-route-month="@prev.Month" class="btn btn-sm btn-outline-secondary">&laquo; @prev.ToString("MMMM yyyy")</a>
+            <h2 class="h5 mb-0">@firstDay.ToString("MMMM yyyy")</h2>
+            <a asp-action="Calendar" asp-route-year="@next.Year" asp-route-month="@next.Month" class="btn btn-sm btn-outline-secondary">@next.ToString("MMMM yyyy") &raquo;</a>
+        </div>
+
+        <div class="appointment-calendar">
+            @for (int day = 1; day <= daysInMonth; day++)
+            {
+                var date = new DateTime(Model.Year, Model.Month, day);
+                var dayAppointments = Model.Appointments.Where(a => a.Date.Date == date).ToList();
+                <div class="calendar-day @(date == DateTime.Today ? "calendar-day-today" : "")">
+                    <div class="calendar-day-header">@day</div>
+                    <div class="calendar-day-body">
+                        @foreach (var a in dayAppointments)
+                        {
+                            <div class="calendar-event">
+                                <span class="badge @BadgeClass(a.Status)">@a.Status</span>
+                                <span class="calendar-event-time">@a.Time.ToString(@"hh\:mm")</span>
+                                <span class="calendar-event-name">@a.PatientName</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@functions {
+    string BadgeClass(string status) => status switch
+    {
+        "Scheduled" => "badge-status-Scheduled",
+        "Checked in" => "badge-status-Checked-in",
+        "In progress" => "badge-status-In-progress",
+        "Completed" => "badge-status-Completed",
+        "Cancelled" => "badge-status-Cancelled",
+        _ => "badge-status-Scheduled"
+    };
+}

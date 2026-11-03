@@ -1,0 +1,51 @@
+@model CareClinicManager.ViewModels.Patient.PatientAppointmentListViewModel
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">My Appointments</h1>
+    <a asp-action="Book" class="btn btn-primary">Book appointment</a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model.Appointments)
+                    {
+                        <tr>
+                            <td>@a.DoctorName</td>
+                            <td>@a.DepartmentName</td>
+                            <td>@a.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@a.Time.ToString(@"hh\:mm")</td>
+                            <td><span class="badge @BadgeClass(a.Status)">@a.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string BadgeClass(string status) => status switch
+    {
+        "Scheduled" => "badge-status-Scheduled",
+        "Checked in" => "badge-status-Checked-in",
+        "In progress" => "badge-status-In-progress",
+        "Completed" => "badge-status-Completed",
+        "Cancelled" => "badge-status-Cancelled",
+        _ => "badge-status-Scheduled"
+    };
+}
